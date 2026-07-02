@@ -66,19 +66,9 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-// Google Ads conversion: replace label when available from Google Ads.
-const CONVERSION_ID = "AW-16678975996";
-const CONVERSION_LABEL = "REEMPLAZAR_CON_LABEL_DE_GOOGLE_ADS";
-export const WA_NUMBER = "5491176030033";
+import { trackConversion } from "@/lib/tracking";
 
-function fireConversion() {
-  const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
-  if (typeof g === "function") {
-    g("event", "conversion", {
-      send_to: `${CONVERSION_ID}/${CONVERSION_LABEL}`,
-    });
-  }
-}
+export const WA_NUMBER = "5491176030033";
 
 function CtaBtn({
   children,
@@ -683,7 +673,7 @@ function Contact() {
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (e.data && typeof e.data === 'string' && e.data.includes('Tally.FormSubmitted')) {
-        fireConversion();
+        trackConversion('1YidCKyH_doZEPzzk5E-');
         navigate({ to: "/solicitud-completada" });
       }
     };
