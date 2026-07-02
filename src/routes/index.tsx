@@ -69,7 +69,7 @@ export const Route = createFileRoute("/")({
 // Google Ads conversion: replace label when available from Google Ads.
 const CONVERSION_ID = "AW-16678975996";
 const CONVERSION_LABEL = "REEMPLAZAR_CON_LABEL_DE_GOOGLE_ADS";
-const WA_NUMBER = "5491176030033";
+export const WA_NUMBER = "5491176030033";
 
 function fireConversion() {
   const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
@@ -131,7 +131,7 @@ function SectionTitle({
   );
 }
 
-function Logo({ light = false }: { light?: boolean }) {
+export function Logo({ light = false }: { light?: boolean }) {
   return (
     <div className="flex items-center gap-2.5">
       <div className="relative flex h-11 w-11 items-center justify-center rounded-md bg-primary">
@@ -157,18 +157,18 @@ function Logo({ light = false }: { light?: boolean }) {
   );
 }
 
-function Header() {
+export function Header() {
   const [open, setOpen] = useState(false);
   const links = [
-    { href: "#catalogo", label: "Catálogo" },
-    { href: "#servicios", label: "Servicios" },
-    { href: "#proceso", label: "Cómo trabajamos" },
-    { href: "#contacto", label: "Contacto" },
+    { href: "/#catalogo", label: "Catálogo" },
+    { href: "/#servicios", label: "Servicios" },
+    { href: "/#proceso", label: "Cómo trabajamos" },
+    { href: "/#contacto", label: "Contacto" },
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
-        <a href="#top"><Logo /></a>
+        <a href="/"><Logo /></a>
         <nav className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a
@@ -496,7 +496,7 @@ function Catalog() {
   );
 }
 
-function Gallery() {
+export function Gallery() {
   const mediaItems = [
     { src: waImg1, alt: "Trabajo realizado 1", type: "image" },
     { src: waImg2, alt: "Trabajo realizado 2", type: "image" },
@@ -777,7 +777,7 @@ function Contact() {
   );
 }
 
-function Footer() {
+export function Footer() {
   return (
     <footer className="bg-ink text-white/80 pt-14 pb-8">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
