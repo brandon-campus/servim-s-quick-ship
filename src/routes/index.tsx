@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { useState, useEffect } from "react";
 import {
   Factory,
   Clock,
@@ -12,6 +12,7 @@ import {
   Menu,
   X,
   Check,
+  FileText,
 } from "lucide-react";
 import {
   Accordion,
@@ -20,6 +21,22 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import heroImg from "@/assets/hero-shutter.jpg";
+import cortinaAmericanaImg from "@/assets/cortina-metalica-americana-h.webp";
+import cortinaCiegaImg from "@/assets/cortina-metalica-galvanizada-ciega-h.webp";
+import cortinaMicroperforadaImg from "@/assets/cortina-metalica-microperforada-h.webp";
+import puertaEscapeImg from "@/assets/puerta de escape.jpg";
+import waImg1 from "@/assets/WhatsApp Image 2026-07-0.jpeg";
+import waImg2 from "@/assets/WhatsApp Image 2026-07-02 at 10.49.32 AM.jpeg";
+import waImg3 from "@/assets/WhatsApp Image 2026-07-02 at 10.49.32 AMdasd.jpeg";
+import waImg4 from "@/assets/WhatsApp Image 2026-07-02 at 10.49.32 AMfafas.jpeg";
+import waImg5 from "@/assets/WhatsApp Image 2026-07-02 at 10.49.32 AMfasda.jpeg";
+import waImg6 from "@/assets/WhatsApp Image 2026-07-02 at 10.49.33 AMafsaf.jpeg";
+import waImg7 from "@/assets/WhatsApp Image 2026-07-02 at 12.58.43 PM.jpeg";
+import waImg8 from "@/assets/WhatsApp Image 2026-07-02 at 12.58.43 PMas.jpeg";
+import waImg9 from "@/assets/WhatsApp Image 2026-07-02 at 12.58.43 PMfdsf.jpeg";
+import waImg10 from "@/assets/WhatsApp Image 2026-07-02 at 12.58.44 PMsdfas.jpeg";
+import waImg11 from "@/assets/WhatsApp Image 2026-07-02 at 12.59.04 PMASD.jpeg";
+import waVideo from "@/assets/WhatsApp Video 2026-07-02 at 12.58.43 PMfds.mp4";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -40,7 +57,7 @@ export const Route = createFileRoute("/")({
             postalCode: "C1437",
             addressCountry: "AR",
           },
-          areaServed: ["CABA", "GBA"],
+          areaServed: ["CABA", "GBA", "Argentina"],
           description:
             "Fábrica propia de cortinas metálicas. Fabricación e instalación en 24hs. +14 años de trayectoria.",
         }),
@@ -53,8 +70,6 @@ export const Route = createFileRoute("/")({
 const CONVERSION_ID = "AW-16678975996";
 const CONVERSION_LABEL = "REEMPLAZAR_CON_LABEL_DE_GOOGLE_ADS";
 const WA_NUMBER = "5491176030033";
-const WA_MESSAGE = "Hola! Quiero pedir un presupuesto para una cortina metálica";
-const WA_LINK = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
 
 function fireConversion() {
   const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
@@ -65,7 +80,7 @@ function fireConversion() {
   }
 }
 
-function WABtn({
+function CtaBtn({
   children,
   className = "",
   variant = "primary",
@@ -78,17 +93,14 @@ function WABtn({
     "inline-flex items-center justify-center gap-2 font-display uppercase tracking-wide text-sm md:text-base px-6 py-3.5 rounded-md transition-all duration-200 active:scale-[0.98]";
   const styles =
     variant === "primary"
-      ? "bg-whatsapp text-whatsapp-foreground hover:brightness-110 shadow-industrial"
+      ? "bg-primary text-white hover:brightness-110 shadow-industrial"
       : "border-2 border-ink text-ink hover:bg-ink hover:text-white";
   return (
     <a
-      href={WA_LINK}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={fireConversion}
+      href="#contacto"
       className={`${base} ${styles} ${className}`}
     >
-      <MessageCircle className="h-5 w-5" strokeWidth={2.5} />
+      <FileText className="h-5 w-5" strokeWidth={2.5} />
       {children}
     </a>
   );
@@ -148,8 +160,8 @@ function Logo({ light = false }: { light?: boolean }) {
 function Header() {
   const [open, setOpen] = useState(false);
   const links = [
-    { href: "#servicios", label: "Servicios" },
     { href: "#catalogo", label: "Catálogo" },
+    { href: "#servicios", label: "Servicios" },
     { href: "#proceso", label: "Cómo trabajamos" },
     { href: "#contacto", label: "Contacto" },
   ];
@@ -169,7 +181,7 @@ function Header() {
           ))}
         </nav>
         <div className="hidden md:block">
-          <WABtn>WhatsApp</WABtn>
+          <CtaBtn>Pedí Presupuesto</CtaBtn>
         </div>
         <button
           className="md:hidden p-2 text-ink"
@@ -191,7 +203,7 @@ function Header() {
               {l.label}
             </a>
           ))}
-          <WABtn className="w-full">Pedí Presupuesto</WABtn>
+          <CtaBtn className="w-full">Pedí Presupuesto</CtaBtn>
         </div>
       )}
     </header>
@@ -225,7 +237,7 @@ function Hero() {
           </h1>
           <p className="mt-6 text-lg md:text-xl text-white/80 max-w-2xl">
             Somos fábrica propia. Sin intermediarios, sin esperas de semanas.
-            +14 años protegiendo comercios en CABA y GBA.
+            +14 años protegiendo comercios en CABA, GBA y todo el país.
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
             {["Fábrica Propia", "Entrega en 24hs", "+14 Años de Trayectoria"].map(
@@ -241,7 +253,7 @@ function Hero() {
             )}
           </div>
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
-            <WABtn>Pedí tu Presupuesto por WhatsApp</WABtn>
+            <CtaBtn>Pedí tu Presupuesto</CtaBtn>
             <a
               href="#catalogo"
               className="inline-flex items-center justify-center gap-2 font-display uppercase tracking-wide text-sm md:text-base px-6 py-3.5 rounded-md border-2 border-white/30 text-white hover:bg-white hover:text-ink transition-all"
@@ -272,7 +284,7 @@ function WhyUs() {
     {
       icon: Award,
       title: "+14 Años de Trayectoria",
-      text: "Más de una década resolviendo la seguridad de comercios en Buenos Aires.",
+      text: "Más de una década resolviendo la seguridad de comercios en todo el país.",
     },
     {
       icon: Wrench,
@@ -369,9 +381,9 @@ function Services() {
               >
                 {c.text}
               </p>
-              <WABtn variant={c.featured ? "primary" : "outline"}>
+              <CtaBtn variant={c.featured ? "primary" : "outline"}>
                 Solicitar Presupuesto
-              </WABtn>
+              </CtaBtn>
             </div>
           ))}
         </div>
@@ -432,18 +444,22 @@ function Catalog() {
     {
       title: "Cortina Ciega",
       text: "Máxima seguridad, ideal para locales que buscan opacidad total.",
+      img: cortinaCiegaImg,
     },
     {
       title: "Cortina Microperforada",
       text: "Seguridad con ventilación y algo de visibilidad. Ideal para locales con vidriera.",
+      img: cortinaMicroperforadaImg,
     },
     {
       title: "Cortina con Puerta de Escape",
       text: "Cumple normativa de salida de emergencia para comercios.",
+      img: puertaEscapeImg,
     },
     {
-      title: "Cortina Motorizada",
-      text: "Apertura y cierre automático con control remoto.",
+      title: "Cortina Americana",
+      text: "Diseño clásico que permite máxima visibilidad y ventilación, ideal para frentes de locales.",
+      img: cortinaAmericanaImg,
     },
   ];
   return (
@@ -456,12 +472,9 @@ function Catalog() {
               key={p.title}
               className="group flex flex-col bg-white border border-border overflow-hidden hover:border-primary transition-colors"
             >
-              {/* PLACEHOLDER: reemplazar con foto real del producto */}
               <div className="relative aspect-[4/3] corrugated overflow-hidden">
+                <img src={p.img} alt={p.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/70 to-transparent" />
-                <div className="absolute bottom-2 left-2 rounded bg-primary/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
-                  Foto próximamente
-                </div>
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <h3 className="font-display text-lg font-bold uppercase mb-2 text-ink">
@@ -471,9 +484,9 @@ function Catalog() {
                 <div className="text-xs font-semibold uppercase tracking-widest text-primary mb-3">
                   Consultar precio
                 </div>
-                <WABtn variant="outline" className="w-full !py-2.5 !text-sm">
-                  Consultar por WhatsApp
-                </WABtn>
+                <CtaBtn variant="outline" className="w-full !py-2.5 !text-sm">
+                  Consultar Precio
+                </CtaBtn>
               </div>
             </div>
           ))}
@@ -484,27 +497,51 @@ function Catalog() {
 }
 
 function Gallery() {
-  // PLACEHOLDER: reemplazar con fotos reales de trabajos cuando el cliente las envíe.
+  const mediaItems = [
+    { src: waImg1, alt: "Trabajo realizado 1", type: "image" },
+    { src: waImg2, alt: "Trabajo realizado 2", type: "image" },
+    { src: waImg3, alt: "Trabajo realizado 3", type: "image" },
+    { src: waImg4, alt: "Trabajo realizado 4", type: "image" },
+    { src: waImg5, alt: "Trabajo realizado 5", type: "image" },
+    { src: waImg6, alt: "Trabajo realizado 6", type: "image" },
+    { src: waImg7, alt: "Trabajo realizado 7", type: "image" },
+    { src: waImg8, alt: "Trabajo realizado 8", type: "image" },
+    { src: waImg9, alt: "Trabajo realizado 9", type: "image" },
+    { src: waImg10, alt: "Trabajo realizado 10", type: "image" },
+    { src: waImg11, alt: "Trabajo realizado 11", type: "image" },
+    { src: waVideo, alt: "Video de trabajo realizado", type: "video" },
+  ];
+
   return (
     <section className="bg-muted/40 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 md:px-6">
         <SectionTitle eyebrow="Galería">Trabajos Realizados</SectionTitle>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {Array.from({ length: 9 }).map((_, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {mediaItems.map((media, i) => (
             <div
               key={i}
-              className="relative aspect-square corrugated overflow-hidden group"
+              className="relative aspect-square md:aspect-[4/5] rounded-xl overflow-hidden group shadow-sm"
             >
-              <div className="absolute inset-0 bg-ink/40 group-hover:bg-ink/20 transition-colors" />
-              <div className="absolute inset-0 flex items-center justify-center text-white/60 text-xs font-semibold uppercase tracking-widest">
-                Trabajo #{i + 1}
-              </div>
+              {media.type === "video" ? (
+                <video 
+                  src={media.src} 
+                  muted 
+                  autoPlay 
+                  loop 
+                  playsInline 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                />
+              ) : (
+                <img 
+                  src={media.src} 
+                  alt={media.alt} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                />
+              )}
+              <div className="absolute inset-0 bg-ink/20 group-hover:bg-transparent transition-colors duration-500" />
             </div>
           ))}
         </div>
-        <p className="mt-6 text-center text-xs text-muted-foreground uppercase tracking-widest">
-          Placeholders — reemplazar con fotos reales de instalaciones
-        </p>
       </div>
     </section>
   );
@@ -600,7 +637,7 @@ function FAQ() {
     },
     {
       q: "¿Qué zonas cubren?",
-      a: "Trabajamos en Capital Federal y Gran Buenos Aires. Contactanos por WhatsApp con tu ubicación para confirmar cobertura.",
+      a: "Trabajamos de forma directa en CABA y GBA, y realizamos trabajos para todo el país. Contactanos para cotizar tu proyecto.",
     },
     {
       q: "¿Hacen cortinas para locales con puerta de escape?",
@@ -641,126 +678,95 @@ function FAQ() {
 }
 
 function Contact() {
-  const [sent, setSent] = useState(false);
-  function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    fireConversion();
-    setSent(true);
-    // TODO: conectar a backend / email de recepción
-  }
-  return (
-    <section id="contacto" className="bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <SectionTitle eyebrow="Contacto">Pedí tu Presupuesto Ahora</SectionTitle>
-        <p className="-mt-6 mb-12 text-center text-muted-foreground max-w-2xl mx-auto">
-          Fabricamos e instalamos en 24hs. Contanos qué necesitás y te respondemos al toque.
-        </p>
-        <div className="grid gap-8 lg:grid-cols-5">
-          <form
-            onSubmit={submit}
-            className="lg:col-span-3 bg-muted/40 p-6 md:p-8 rounded-md border border-border space-y-4"
-          >
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-widest mb-1.5 text-ink">
-                  Nombre *
-                </label>
-                <input
-                  required
-                  type="text"
-                  name="nombre"
-                  className="w-full rounded-md border border-border bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-widest mb-1.5 text-ink">
-                  WhatsApp / Teléfono *
-                </label>
-                <input
-                  required
-                  type="tel"
-                  name="telefono"
-                  className="w-full rounded-md border border-border bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-widest mb-1.5 text-ink">
-                Tipo de local
-              </label>
-              <select
-                name="tipo"
-                defaultValue="Comercial"
-                className="w-full rounded-md border border-border bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                <option>Comercial</option>
-                <option>Residencial</option>
-                <option>Industrial</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-widest mb-1.5 text-ink">
-                Mensaje
-              </label>
-              <textarea
-                name="mensaje"
-                rows={4}
-                placeholder="Medidas aproximadas, ubicación, etc."
-                className="w-full rounded-md border border-border bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={sent}
-              className="w-full inline-flex items-center justify-center gap-2 font-display uppercase tracking-wide text-base px-6 py-4 rounded-md bg-primary text-white hover:brightness-110 transition-all shadow-industrial disabled:opacity-70"
-            >
-              {sent ? (
-                <>
-                  <Check className="h-5 w-5" /> Consulta Enviada
-                </>
-              ) : (
-                <>
-                  Enviar Consulta <ArrowRight className="h-5 w-5" />
-                </>
-              )}
-            </button>
-          </form>
+  useEffect(() => {
+    const handleMessage = (e: MessageEvent) => {
+      if (e.data && typeof e.data === 'string' && e.data.includes('Tally.FormSubmitted')) {
+        fireConversion();
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    
+    // Inject Tally script
+    const w = "https://tally.so/widgets/embed.js";
+    const v = function() {
+      if (typeof (window as any).Tally !== "undefined") {
+        (window as any).Tally.loadEmbeds();
+      } else {
+        document.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e: any){e.src=e.dataset.tallySrc}));
+      }
+    };
+    if (typeof (window as any).Tally !== "undefined") {
+      v();
+    } else if (document.querySelector('script[src="' + w + '"]') == null) {
+      const s = document.createElement("script");
+      s.src = w;
+      s.onload = v;
+      s.onerror = v;
+      document.body.appendChild(s);
+    }
+    
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
 
-          <div className="lg:col-span-2 space-y-4">
-            <div className="bg-ink text-white p-6 md:p-8 rounded-md">
-              <h3 className="font-display text-xl font-bold uppercase mb-5">
-                Contacto Directo
-              </h3>
-              <div className="space-y-4 mb-6">
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                  <div className="text-sm">
-                    <div className="font-semibold">Monteagudo 481</div>
-                    <div className="text-white/70">C1437, CABA</div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                  <a
-                    href={`tel:+${WA_NUMBER}`}
-                    className="text-sm font-semibold hover:text-primary"
-                  >
-                    +54 9 11 7603-0033
-                  </a>
+  return (
+    <section id="contacto" className="bg-muted/20 py-20 md:py-28 scroll-mt-20">
+      <div className="mx-auto max-w-4xl px-4 md:px-6">
+        <SectionTitle eyebrow="Contacto">Pedí tu Presupuesto</SectionTitle>
+        <p className="-mt-6 mb-10 text-center text-muted-foreground max-w-xl mx-auto">
+          Completá el formulario con los detalles y te enviaremos una cotización sin cargo lo antes posible.
+        </p>
+        
+        {/* Formulario Principal */}
+        <div className="bg-white rounded-xl shadow-industrial border border-border p-2 md:p-6 mb-12 relative z-10">
+          <iframe
+            data-tally-src="https://tally.so/embed/wAxL6N?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+            loading="lazy"
+            width="100%"
+            height="700"
+            frameBorder="0"
+            marginHeight={0}
+            marginWidth={0}
+            title="¡Pedí tu presupuesto ahora!"
+            className="border-none w-full"
+          />
+        </div>
+
+        {/* Info adicional y mapa */}
+        <div className="grid sm:grid-cols-2 gap-6">
+          <div className="bg-ink text-white p-6 md:p-8 rounded-xl flex flex-col justify-center">
+            <h3 className="font-display text-lg font-bold uppercase mb-4 text-primary">
+              Atención Directa
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Phone className="h-5 w-5 text-primary flex-shrink-0" />
+                <a
+                  href={`tel:+${WA_NUMBER}`}
+                  className="text-sm font-medium hover:text-primary transition-colors"
+                >
+                  +54 9 11 7603-0033
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                <MapPin className="h-5 w-5 text-primary flex-shrink-0" />
+                <div className="text-sm text-white/80">
+                  Monteagudo 481, CABA (C1437)
                 </div>
               </div>
-              <WABtn className="w-full">Escribinos por WhatsApp</WABtn>
             </div>
-            <div className="overflow-hidden rounded-md border border-border">
-              <iframe
-                title="Servimás - Monteagudo 481, CABA"
-                src="https://www.google.com/maps?q=Monteagudo+481,+C1437+CABA,+Argentina&output=embed"
-                width="100%"
-                height="240"
-                loading="lazy"
-                style={{ border: 0 }}
-              />
-            </div>
+          </div>
+          
+          <div className="overflow-hidden rounded-xl border border-border h-48 sm:h-auto">
+            <iframe
+              title="Servimás - Monteagudo 481, CABA"
+              src="https://www.google.com/maps?q=Monteagudo+481,+C1437+CABA,+Argentina&output=embed"
+              width="100%"
+              height="100%"
+              loading="lazy"
+              style={{ border: 0, minHeight: '100%' }}
+            />
           </div>
         </div>
       </div>
@@ -776,7 +782,7 @@ function Footer() {
           <div>
             <Logo light />
             <p className="mt-4 text-sm text-white/60 max-w-sm">
-              Fábrica propia de cortinas metálicas. Fabricación e instalación en 24hs. +14 años en el mercado. CABA y GBA.
+              Fábrica propia de cortinas metálicas. Fabricación e instalación en 24hs. +14 años en el mercado. CABA, GBA y todo el país.
             </p>
           </div>
           <div>
@@ -806,7 +812,7 @@ function Footer() {
         </div>
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between gap-3 text-xs text-white/50">
           <div>© 2026 Servimás Cortinas Metálicas. Todos los derechos reservados.</div>
-          <div>Fábrica propia · CABA & GBA</div>
+          <div>Fábrica propia · CABA, GBA y todo el país</div>
         </div>
       </div>
     </footer>
@@ -816,12 +822,9 @@ function Footer() {
 function FloatingWA() {
   return (
     <a
-      href={WA_LINK}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={fireConversion}
+      href="#contacto"
       className="fixed bottom-5 right-5 z-50 group flex items-center gap-2 rounded-full bg-whatsapp text-white shadow-industrial hover:brightness-110 transition-all pl-4 pr-5 py-3.5"
-      aria-label="Escribinos por WhatsApp"
+      aria-label="Pedí tu presupuesto"
     >
       <MessageCircle className="h-6 w-6" strokeWidth={2.5} />
       <span className="hidden sm:inline font-display uppercase text-sm tracking-wide">
@@ -837,10 +840,10 @@ function Landing() {
       <Header />
       <main>
         <Hero />
-        <WhyUs />
+        <Catalog />
         <Services />
         <Process />
-        <Catalog />
+        <WhyUs />
         <Gallery />
         <Stats />
         <Testimonials />
