@@ -9,8 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SolicitudCompletadaRouteImport } from './routes/solicitud-completada'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SolicitudCompletadaRoute = SolicitudCompletadaRouteImport.update({
+  id: '/solicitud-completada',
+  path: '/solicitud-completada',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +25,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/solicitud-completada': typeof SolicitudCompletadaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/solicitud-completada': typeof SolicitudCompletadaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/solicitud-completada': typeof SolicitudCompletadaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/solicitud-completada'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/solicitud-completada'
+  id: '__root__' | '/' | '/solicitud-completada'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SolicitudCompletadaRoute: typeof SolicitudCompletadaRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/solicitud-completada': {
+      id: '/solicitud-completada'
+      path: '/solicitud-completada'
+      fullPath: '/solicitud-completada'
+      preLoaderRoute: typeof SolicitudCompletadaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SolicitudCompletadaRoute: SolicitudCompletadaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

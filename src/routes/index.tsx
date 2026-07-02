@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import {
   Factory,
@@ -678,10 +678,13 @@ function FAQ() {
 }
 
 function Contact() {
+  const navigate = useNavigate({ from: "/" });
+
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       if (e.data && typeof e.data === 'string' && e.data.includes('Tally.FormSubmitted')) {
         fireConversion();
+        navigate({ to: "/solicitud-completada" });
       }
     };
     window.addEventListener('message', handleMessage);
