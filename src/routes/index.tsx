@@ -48,7 +48,7 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "LocalBusiness",
           name: "Servimás Cortinas Metálicas",
-          image: "",
+          image: "https://servimas.com.ar/favicon.svg",
           telephone: "+5491176030033",
           address: {
             "@type": "PostalAddress",
